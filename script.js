@@ -1,72 +1,106 @@
 // TODO: Include packages needed for this application
-var inquirer = require('inquirer');
+var inquirer = require("inquirer");
 const fs = require("fs");
 
 // TODO: Create an array of questions for user input
-const questions = [];
 
-
-inquirer.prompt([
+const questions = [
   {
     type: "input",
     message: "What is the title of your project?",
-    name: "name"
+    name: "title",
   },
   {
     type: "input",
     message: "Please enter a description of your project.",
-    name: "description"
+    name: "description",
   },
   {
     type: "input",
     message: "Please enter the proper installation instructions.",
-    name: "installation"
+    name: "installation",
   },
   {
     type: "input",
     message: "Please enter your contribution guidlines.",
-    name: "contribution"
+    name: "contribution",
   },
   {
     type: "input",
     message: "Please enter all test instructions.",
-    name: "test"
+    name: "test",
   },
   {
-
-    type: "input",
+    type: "list",
     message: "What license would you like to use for your application?",
     // must be multiple choice
-    name: "license"
+    name: "license",
+    choices: ["Apache-2.0", "MIT", "Artistic-2.0", "MPL-2.0"],
   },
-  
-])
+  {
+    type: "input",
+    message: "What is your github user name?",
+    name: "github",
+  },
+  {
+    type: "input",
+    message: "What is your email address",
+    name: "email",
+  },
+];
 
-.then(response => {
-  const pjReadme = `
-  # <Your-Project-Title>
+// TODO: Create a function to write README file
+function writeToFile(fileName, data) {}
+
+function createLicenseBadge(data) {
+  if (data.license === "Artistic-2.0") {
+    return "[![License: Artistic-2.0](https://img.shields.io/badge/License-Artistic%202.0-0298c3.svg)](https://opensource.org/licenses/Artistic-2.0)";
+  }
+  if (data.license === "Apache-2.0") {
+    return "[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)";
+  }
+  if (data.license === "MIT") {
+    return "[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)";
+  }
+  if (data.license === "MPL-2.0") {
+    return "[![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)";
+  }
+}
+
+// TODO: Create a function to initialize app
+function init() {
+  inquirer.prompt(questions).then((response) => {
+    console.log(response);
+    const pjReadme = `
+
+  # ${response.title}
+
 ## Description
-Provide a short description explaining the what, why, and how of your project. Use the following questions as a guide:
-- What was your motivation?
-- Why did you build this project? (Note: the answer is not "Because it was a homework assignment.")
-- What problem does it solve?
-- What did you learn?
+${response.description}
+
+
+
 ## Table of Contents (Optional)
-If your README is long, add a table of contents to make it easy for users to find what they need.
+
 - [Installation](#installation)
 - [Usage](#usage)
 - [Credits](#credits)
 - [License](#license)
+- [Questions](#questions)
+
 ## Installation
-What are the steps required to install your project? Provide a step-by-step description of how to get the development environment running.
+${response.installation}
+
 ## Usage
+
 
 ## Credits
 
 
 ## License
-The last section of a high-quality README file is the license. This lets other developers know what they can and cannot do with your project. If you need help choosing a license, refer to [https://choosealicense.com/](https://choosealicense.com/).
+${response.license}
 
+${createLicenseBadge(response)}
  
 ## Badges
 
@@ -74,22 +108,27 @@ The last section of a high-quality README file is the license. This lets other d
 ## Features
 
 ## How to Contribute
+${response.contribution}
 
 ## Tests
-Go the extra mile and write tests for your application. Then provide examples on how to run them here.`
+${response.test}
 
-fs.writeFile("pjREADME.md", pjReadme, err => {
-    err ? console.log("Big trouble my dude!") : console.log("Cool beans!")
-  })
-})
+## Questions
 
+You can view my work on my github
+[${response.github}](https://github.com/${response.github})
 
-// TODO: Create a function to write README file
-function writeToFile(fileName, data) {}
+You can contact me at 
+${response.email}
+`;
 
-// TODO: Create a function to initialize app
-function init() {}
+    console.log(pjReadme);
+    return fs.writeFile("pjREADME.md", pjReadme, (err) => {
+      console.log("hello");
+      err ? console.log("Big trouble my dude!") : console.log("Cool beans!");
+    });
+  });
+}
 
 // Function call to initialize app
 init();
-
