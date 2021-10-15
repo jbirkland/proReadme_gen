@@ -22,6 +22,11 @@ const questions = [
   },
   {
     type: "input",
+    message: "How do I use the application?.",
+    name: "usage",
+  },
+  {
+    type: "input",
     message: "Please enter your contribution guidlines.",
     name: "contribution",
   },
@@ -73,7 +78,7 @@ function init() {
     console.log(response);
     const pjReadme = `
 
-  # ${response.title}
+  # ${response.title} ${createLicenseBadge(response)}
 
 ## Description
 ${response.description}
@@ -84,28 +89,28 @@ ${response.description}
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [Credits](#credits)
 - [License](#license)
+- [Badges](#badges)
+- [How to Contribute](#howtocontribute)
+- [Tests](#tests)
 - [Questions](#questions)
+
 
 ## Installation
 ${response.installation}
 
 ## Usage
-
-
-## Credits
+${response.usage}
 
 
 ## License
-${response.license}
 
+"This app is covered under the "${response.license}
+
+
+ ## Badges
 ${createLicenseBadge(response)}
- 
-## Badges
 
-
-## Features
 
 ## How to Contribute
 ${response.contribution}
